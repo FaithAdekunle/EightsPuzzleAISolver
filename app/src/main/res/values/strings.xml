@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">n-Puzzle</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="template_name">Template</string>
+    <string name="search_name">Method</string>
+    <string name="button_name">START</string>
+    <string name="template_menu">Templates</string>
+    <string name="methods_menu">Search Methods</string>
+</resources>

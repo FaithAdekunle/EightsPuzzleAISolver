@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/templates"
+        android:title="@string/template_menu">
+
+        <menu>
+
+            <item android:id="@+id/TEMPLATE1"
+                android:title="TEMPLATE1"/>
+
+            <item android:id="@+id/TEMPLATE2"
+                android:title="TEMPLATE2"/>
+
+            <item android:id="@+id/TEMPLATE3"
+                android:title="TEMPLATE3"/>
+
+            <item android:id="@+id/TEMPLATE4"
+                android:title="TEMPLATE4"/>
+
+            <item android:id="@+id/TEMPLATE5"
+                android:title="TEMPLATE5"/>
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/methods"
+        android:title="@string/methods_menu">
+
+        <menu>
+            <item android:id="@+id/depthfirstsearch"
+                android:title="DEPTH_FIRST"/>
+
+            <item android:id="@+id/breadthfirstsearch"
+                android:title="BREADTH_FIRST"/>
+
+            <item android:id="@+id/uniformcostsearch"
+                android:title="UNIFORM_COST"/>
+
+            <item android:id="@+id/greedysearch"
+                android:title="GREEDY"/>
+
+            <item android:id="@+id/astarsearch"
+                android:title="A_STAR"/>
+        </menu>
+
+    </item>
+
+</menu>

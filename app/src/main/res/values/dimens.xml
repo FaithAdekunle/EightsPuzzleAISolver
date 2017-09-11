@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="scoreContainerHeight">100dp</dimen>
+    <dimen name="scoreContainerTextSize">20dp</dimen>
+    <dimen name="parentPadding">16dp</dimen>
+    <dimen name="tileWidth">1dp</dimen>
+    <dimen name="cellPad">1dp</dimen>
+    <dimen name="textMargin">6dp</dimen>
+    <dimen name="gridWidth">2dp</dimen>
+    <dimen name="medium_textSize">24dp</dimen>
+    <dimen name="small_pad">4dp</dimen>
+    <dimen name="medium_pad">8dp</dimen>
+</resources>
