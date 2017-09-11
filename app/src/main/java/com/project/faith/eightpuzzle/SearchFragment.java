@@ -22,6 +22,7 @@ public class SearchFragment extends Fragment {
         super.onAttach(activity);
         try{
             readyToSearch = (onSpaceTileReadyToSearch) activity;
+            activity.closeOptionsMenu();
             readyToSearch.searchBegin();
         }
         catch(ClassCastException e){
