@@ -2,10 +2,9 @@ package com.project.faith.eightpuzzle;
 
 
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
-import android.widget.Toast;
-import java.util.ArrayList;
 
 public class SearchFragment extends Fragment {
 
@@ -22,7 +21,6 @@ public class SearchFragment extends Fragment {
         super.onAttach(activity);
         try{
             readyToSearch = (onSpaceTileReadyToSearch) activity;
-            activity.closeOptionsMenu();
             readyToSearch.searchBegin();
         }
         catch(ClassCastException e){

@@ -64,7 +64,24 @@ public class Grid {
         for(int i=0; i<listLength; i++){
            tileList[i] = i;
         }
-        return groupTileList(shuffleTileList(tileList));
+        tileList = shuffleTileList(tileList);
+        while(!isTileListValid(tileList)){
+            shuffleTileList(tileList);
+        }
+        return groupTileList(tileList);
+    }
+
+    private boolean isTileListValid(int[] tileList){
+        int count = 0;
+        for(int i=0; i<tileList.length-1; i++){
+            if(tileList[i] == 0) continue;
+            for(int j=i+1; j<tileList.length; j++){
+                if(tileList[j] == 0) continue;
+                if(tileList[j] > tileList[i]) count++;
+            }
+        }
+        if(count%2 > 0) return false;
+        return true;
     }
 
     private int[] shuffleTileList(int[] tileList){

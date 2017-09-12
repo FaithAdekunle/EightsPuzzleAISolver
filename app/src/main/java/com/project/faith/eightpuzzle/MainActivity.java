@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
             @Override
             public void onGlobalLayout() {
                 if (isSet) return;
-                onGameStart(false);
+                onGameStart(true);
                 isSet = true;
             }
         });
