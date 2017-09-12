@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
         }
         grid.spaceTile.setGameState();
         GridTemplate.GameStateDone = false;
+        GridTemplate.selectedMode = GridTemplate.GameMode.MANUAL;
         moves = 0;
         movesText.setText("Moves: " + moves);
         int[][] matrix = grid.matrix;
