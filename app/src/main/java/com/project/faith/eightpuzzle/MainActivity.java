@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
             @Override
             public void onGlobalLayout() {
                 if (isSet) return;
-                onGameStart(true);
+                onGameStart(false);
                 isSet = true;
             }
         });
@@ -47,6 +47,13 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
 
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
+            case R.id.RESET:
+                onGameReset(true);
+                return true;
+            case R.id.AUTO:
+                GridTemplate.selectedTemplate = null;
+                onGameStart(true);
+                return true;
             case R.id.TEMPLATE1:
                 GridTemplate.selectedTemplate = GridTemplate.GridTemplates.TEMPLATE1;
                 onGameStart(false);
@@ -94,14 +101,24 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
 
     public void onGameStart(boolean random) {
         GridTemplate.selectedMode = GridTemplate.GameMode.MANUAL;
-        GridTemplate.GameStateDone = false;
-        moves = 0;
-        movesText.setText("Moves: " + moves);
         grid = new Grid(3);
         if(random) grid.populateMatrix();
         if(!random) grid.populateMatrixDefault(GridTemplate.selectedTemplate);
         grid.setTiles(gridContainer);
+        onGameReset(false);
+    }
+
+    public void onGameReset(boolean reset){
+        if(reset){
+            int[][] matrix = grid.matrix;
+            grid = new Grid(3);
+            grid.matrix = matrix;
+            grid.setTiles(gridContainer);
+        }
         grid.spaceTile.setGameState();
+        GridTemplate.GameStateDone = false;
+        moves = 0;
+        movesText.setText("Moves: " + moves);
         int[][] matrix = grid.matrix;
         int gridScale = grid.gridScale;
         ChangeSpaceTile changeSpaceTile = new ChangeSpaceTile() {
@@ -151,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
 
     @Override
     public void searchMemoryError() {
-        movesText.setText("Memory space exhausted!!");
+        movesText.setText("Memory space exhausted! Solve with another method.");
         this.onPause();
     }
 

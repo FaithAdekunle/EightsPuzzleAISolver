@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:id="@+id/RESET"
+        android:title="RESET"/>
+
     <item
         android:id="@+id/templates"
         android:title="@string/template_menu">
 
         <menu>
+
+            <item android:id="@+id/AUTO"
+                android:title="AUTO TEMPLATE"/>
 
             <item android:id="@+id/TEMPLATE1"
                 android:title="TEMPLATE1"/>

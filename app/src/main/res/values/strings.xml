@@ -7,5 +7,5 @@
     <string name="search_name">Method</string>
     <string name="button_name">START</string>
     <string name="template_menu">Templates</string>
-    <string name="methods_menu">Search Methods</string>
+    <string name="methods_menu">Solve with...</string>
 </resources>
