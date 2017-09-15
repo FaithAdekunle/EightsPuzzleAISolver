@@ -17,16 +17,40 @@
 
     </RelativeLayout>
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/scoreContainerHeight"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:gravity="center_horizontal|center_vertical"
-        android:id="@+id/scoreContainer"
-        android:textSize="@dimen/scoreContainerTextSize"
+        android:orientation="horizontal"
+        android:weightSum="3"
         android:background="@drawable/grid"
-        android:layout_marginTop="@dimen/parentPadding"/>
+        android:layout_marginTop="@dimen/parentPadding">
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:id="@+id/searchLength"
+            tools:text="abcd"/>
 
+        <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:id="@+id/scoreContainer"
+        tools:text="abcd"/>
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:id="@+id/movesFound"
+            tools:text="abcd"/>
+
+    </LinearLayout>
 </LinearLayout>

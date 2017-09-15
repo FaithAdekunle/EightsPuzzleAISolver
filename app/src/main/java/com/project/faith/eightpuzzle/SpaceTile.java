@@ -148,12 +148,13 @@ public class SpaceTile {
         return moves;
     }
 
-    public void takeActions(){
-        if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.BREADTHFIRSTSEARCH)){directions = GameAI.BreadthFirstSearch(this.grid);}
-        else if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.DEPTHFIRSTSEARCH)){directions = GameAI.DepthFirstSearch(this.grid);}
-        else if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.UNIFORMCOSTSEARCH)){directions = GameAI.UniformCostSearch(this.grid);}
-        else if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.GREEDYSEARCH)){directions = GameAI.GreedySearch(this.grid);}
-        else if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.ASTARSEARCH)){directions = GameAI.AStarSearch(this.grid);}
+    public void takeActions(GameAI.GameAIProperties gameAIProperties){
+        GameAI gameAI = new GameAI(gameAIProperties);
+        if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.BREADTHFIRSTSEARCH)){directions = gameAI.BreadthFirstSearch(this.grid);}
+        else if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.DEPTHFIRSTSEARCH)){directions = gameAI.DepthFirstSearch(this.grid);}
+        else if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.UNIFORMCOSTSEARCH)){directions = gameAI.UniformCostSearch(this.grid);}
+        else if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.GREEDYSEARCH)){directions = gameAI.GreedySearch(this.grid);}
+        else if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.ASTARSEARCH)){directions = gameAI.AStarSearch(this.grid);}
         moveIndex = 0;
         handler.postDelayed(actionRunnable, ACTION_DELAY);
     }

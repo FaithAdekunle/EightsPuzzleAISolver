@@ -3,15 +3,20 @@ package com.project.faith.eightpuzzle;
 
 import android.app.Activity;
 import android.app.Fragment;
+import java.util.Date;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment{
 
     onSpaceTileReadyToSearch readyToSearch;
+    Date startTimer;
+    Date endTimer;
+    int numberOfMoves = 0;
 
     public SearchFragment() {}
 
     public interface onSpaceTileReadyToSearch{
-        void searchBegin();
+        void searchBegin(GameAI.GameAIProperties gameAIProperties);
+        void searchEnd(double duration, int numberOfMoves);
         void searchMemoryError();
     }
 
@@ -19,7 +24,7 @@ public class SearchFragment extends Fragment {
         super.onAttach(activity);
         try{
             readyToSearch = (onSpaceTileReadyToSearch) activity;
-            readyToSearch.searchBegin();
+            readyToSearch.searchBegin(this.gameAIProperties);
         }
         catch(ClassCastException e){
             throw new ClassCastException(activity.toString() + "MainActivity must implement onSpaceTileReadyToSearch interface");
@@ -29,5 +34,29 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    private GameAI.GameAIProperties gameAIProperties = new GameAI.GameAIProperties() {
+        @Override
+        public void startSearchTimer() {
+            startTimer = new Date();
+        }
 
+        @Override
+        public void stopSearchTimer() {
+            endTimer = new Date();
+            double timeDiffSeconds = (endTimer.getTime() - startTimer.getTime())/1000;
+            readyToSearch.searchEnd(timeDiffSeconds, numberOfMoves);
+        }
+
+        private double convertTime(double time){
+            if(time <= 60) return time;
+            else{
+                return time/60;
+            }
+        }
+
+        @Override
+        public void numberOfMovesFound(int num) {
+            numberOfMoves = num;
+        }
+    };
 }

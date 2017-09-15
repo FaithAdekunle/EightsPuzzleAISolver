@@ -10,14 +10,19 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity implements SearchFragment.onSpaceTileReadyToSearch{
 
     public RelativeLayout gridContainer;
     public TextView movesText;
+    public TextView movesFound;
+    public TextView searchLength;
     public int moves = 0;
     public Grid grid;
     public boolean isSet = false;
@@ -29,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
         setContentView(R.layout.activity_main);
         gridContainer = (RelativeLayout) findViewById(R.id.gridContainer);
         movesText = (TextView) findViewById(R.id.scoreContainer);
+        movesFound = (TextView) findViewById(R.id.movesFound);
+        searchLength = (TextView) findViewById(R.id.searchLength);
         gridContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -120,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
         GridTemplate.selectedMode = GridTemplate.GameMode.MANUAL;
         moves = 0;
         movesText.setText("Moves: " + moves);
+        movesFound.setVisibility(View.INVISIBLE);
+        searchLength.setVisibility(View.INVISIBLE);
         int[][] matrix = grid.matrix;
         int gridScale = grid.gridScale;
         ChangeSpaceTile changeSpaceTile = new ChangeSpaceTile() {
@@ -145,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
 
     public void setFragment(){
         if(!GridTemplate.GameStateDone){
-            movesText.setText("Searching...\nThis might take very long!");
+            movesText.setText("Searching...\nThis may take a while.");
             FragmentManager manager = getFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
             SearchFragment fragment = new SearchFragment();
@@ -163,8 +172,17 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
     }
 
     @Override
-    public void searchBegin() {
-        if(!GridTemplate.GameStateDone)this.grid.spaceTile.takeActions();
+    public void searchBegin(GameAI.GameAIProperties gameAIProperties) {
+        if(!GridTemplate.GameStateDone)this.grid.spaceTile.takeActions(gameAIProperties);
+    }
+
+    @Override
+    public void searchEnd(double duration, int numberOfMoves) {
+        searchLength.setVisibility(View.VISIBLE);
+        movesFound.setVisibility(View.VISIBLE);
+        if(duration > 60) duration = duration/60;
+        searchLength.setText("Duration: " + (duration <= 60 ? duration + "s" : String.valueOf(duration/60).substring(0, 4) + "m") + "");
+        movesFound.setText("Goal: " + numberOfMoves + "");
     }
 
     @Override

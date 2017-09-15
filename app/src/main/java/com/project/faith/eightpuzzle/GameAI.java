@@ -12,12 +12,25 @@ import java.util.Queue;
 
 public class GameAI {
 
-    public static ArrayList<SpaceTile.Direction> DepthFirstSearch(Grid grid){
+    public GameAIProperties gameAIProperties;
+
+    public GameAI(GameAIProperties gameAIProperties){
+        this.gameAIProperties = gameAIProperties;
+    }
+
+    public interface GameAIProperties{
+        void startSearchTimer();
+        void stopSearchTimer();
+        void numberOfMovesFound(int num);
+    }
+
+    public ArrayList<SpaceTile.Direction> DepthFirstSearch(Grid grid){
         SpaceTile spaceTile = grid.spaceTile;
         ArrayList<SpaceTile> spaceTiles = new ArrayList<>();
         ArrayList<GameState> gameStates = new ArrayList<>();
         ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         boolean goalFound = false;
+        this.gameAIProperties.startSearchTimer();
         while(!goalFound){
             ArrayList<SpaceTile.Direction> directions = spaceTile.availableMoves();
             for(SpaceTile.Direction direction : directions){
@@ -29,6 +42,8 @@ public class GameAI {
                     goalFound = true;
                     GridTemplate.GameStateDone = true;
                     searchActions.addAll(tempSpaceTile.actions);
+                    this.gameAIProperties.numberOfMovesFound(searchActions.size());
+                    this.gameAIProperties.stopSearchTimer();
                     Log.v("moves", searchActions.size()+"");
                 }
                 spaceTiles.add(0, tempSpaceTile);
@@ -44,12 +59,13 @@ public class GameAI {
         return  searchActions;
     }
 
-    public static ArrayList<SpaceTile.Direction> BreadthFirstSearch(Grid grid){
+    public ArrayList<SpaceTile.Direction> BreadthFirstSearch(Grid grid){
         SpaceTile spaceTile = grid.spaceTile;
         ArrayList<SpaceTile> spaceTiles = new ArrayList<>();
         ArrayList<GameState> gameStates = new ArrayList<>();
         ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         boolean goalFound = false;
+        this.gameAIProperties.startSearchTimer();
         while(!goalFound){
             ArrayList<SpaceTile.Direction> directions = spaceTile.availableMoves();
             for(SpaceTile.Direction direction : directions){
@@ -61,6 +77,8 @@ public class GameAI {
                     goalFound = true;
                     GridTemplate.GameStateDone = true;
                     searchActions.addAll(tempSpaceTile.actions);
+                    this.gameAIProperties.numberOfMovesFound(searchActions.size());
+                    this.gameAIProperties.stopSearchTimer();
                     Log.v("moves", searchActions.size()+"");
                 }
                 spaceTiles.add(tempSpaceTile);
@@ -74,7 +92,7 @@ public class GameAI {
         return  searchActions;
     }
 
-    public static ArrayList<SpaceTile.Direction> UniformCostSearch(Grid grid){
+    public ArrayList<SpaceTile.Direction> UniformCostSearch(Grid grid){
         SpaceTile spaceTile = grid.spaceTile;
         Queue<SpaceTile> spaceTileQueue = new PriorityQueue<>(10, new Comparator<SpaceTile>() {
             @Override
@@ -85,9 +103,12 @@ public class GameAI {
         ArrayList<GameState> gameStates = new ArrayList<>();
         ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         boolean goalFound = false;
+        this.gameAIProperties.startSearchTimer();
         while(!goalFound){
             if(((spaceTile.row == 0 && spaceTile.col == 0) || (spaceTile.row ==  grid.gridScale-1 && spaceTile.col == grid.gridScale-1)) && spaceTile.gameState.isGoalState(grid.gridScale)) {
                 searchActions.addAll(spaceTile.actions);
+                this.gameAIProperties.numberOfMovesFound(searchActions.size());
+                this.gameAIProperties.stopSearchTimer();
                 Log.v("moves", searchActions.size()+"");
                 goalFound = true;
                 GridTemplate.GameStateDone = true;
@@ -109,7 +130,7 @@ public class GameAI {
         return searchActions;
     }
 
-    public static ArrayList<SpaceTile.Direction> GreedySearch(Grid grid){
+    public ArrayList<SpaceTile.Direction> GreedySearch(Grid grid){
         SpaceTile spaceTile = grid.spaceTile;
         Queue<SpaceTile> spaceTileQueue = new PriorityQueue<>(10, new Comparator<SpaceTile>() {
             @Override
@@ -120,9 +141,12 @@ public class GameAI {
         ArrayList<GameState> gameStates = new ArrayList<>();
         ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         boolean goalFound = false;
+        this.gameAIProperties.startSearchTimer();
         while(!goalFound){
             if(((spaceTile.row == 0 && spaceTile.col == 0) || (spaceTile.row ==  grid.gridScale-1 && spaceTile.col == grid.gridScale-1)) && spaceTile.gameState.isGoalState(grid.gridScale)) {
                 searchActions.addAll(spaceTile.actions);
+                this.gameAIProperties.numberOfMovesFound(searchActions.size());
+                this.gameAIProperties.stopSearchTimer();
                 Log.v("moves", searchActions.size()+"");
                 goalFound = true;
                 GridTemplate.GameStateDone = true;
@@ -144,7 +168,7 @@ public class GameAI {
         return searchActions;
     }
 
-    public static ArrayList<SpaceTile.Direction> AStarSearch(Grid grid){
+    public ArrayList<SpaceTile.Direction> AStarSearch(Grid grid){
         SpaceTile spaceTile = grid.spaceTile;
         Queue<SpaceTile> spaceTileQueue = new PriorityQueue<>(10, new Comparator<SpaceTile>() {
             @Override
@@ -155,9 +179,12 @@ public class GameAI {
         ArrayList<GameState> gameStates = new ArrayList<>();
         ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         boolean goalFound = false;
+        this.gameAIProperties.startSearchTimer();
         while(!goalFound){
             if(((spaceTile.row == 0 && spaceTile.col == 0) || (spaceTile.row ==  grid.gridScale-1 && spaceTile.col == grid.gridScale-1)) && spaceTile.gameState.isGoalState(grid.gridScale)) {
                 searchActions.addAll(spaceTile.actions);
+                this.gameAIProperties.numberOfMovesFound(searchActions.size());
+                this.gameAIProperties.stopSearchTimer();
                 Log.v("moves", searchActions.size()+"");
                 goalFound = true;
                 GridTemplate.GameStateDone = true;
