@@ -1,6 +1,6 @@
 package com.project.faith.eightpuzzle;
 
-import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
