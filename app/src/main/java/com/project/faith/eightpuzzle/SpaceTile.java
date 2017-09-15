@@ -22,7 +22,7 @@ public class SpaceTile {
     public ArrayList<Direction> actions = new ArrayList<>();
     Handler handler = new Handler();
     Runnable actionRunnable;
-    final static int ACTION_DELAY = 1000;
+    final static int ACTION_DELAY = 500;
     ArrayList<Direction> directions = new ArrayList<>();
     private int moveIndex = 0;
 
