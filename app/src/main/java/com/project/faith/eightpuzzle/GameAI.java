@@ -44,7 +44,6 @@ public class GameAI {
                     searchActions.addAll(tempSpaceTile.actions);
                     this.gameAIProperties.numberOfMovesFound(searchActions.size());
                     this.gameAIProperties.stopSearchTimer();
-                    Log.v("moves", searchActions.size()+"");
                 }
                 spaceTiles.add(0, tempSpaceTile);
                 gameStates.add(tempSpaceTile.gameState);
@@ -54,7 +53,6 @@ public class GameAI {
                 spaceTile = spaceTiles.get(0);
                 spaceTiles.remove(0);
             }
-            Log.v("fringe", spaceTiles.size()+"");
         }
         return  searchActions;
     }
@@ -79,13 +77,11 @@ public class GameAI {
                     searchActions.addAll(tempSpaceTile.actions);
                     this.gameAIProperties.numberOfMovesFound(searchActions.size());
                     this.gameAIProperties.stopSearchTimer();
-                    Log.v("moves", searchActions.size()+"");
                 }
                 spaceTiles.add(tempSpaceTile);
                 gameStates.add(tempSpaceTile.gameState);
             }
             if(spaceTiles.size() == 0) goalFound = true;
-            Log.v("fringe", spaceTiles.size()+"");
             spaceTile = spaceTiles.get(0);
             spaceTiles.remove(0);
         }
@@ -109,11 +105,9 @@ public class GameAI {
                 searchActions.addAll(spaceTile.actions);
                 this.gameAIProperties.numberOfMovesFound(searchActions.size());
                 this.gameAIProperties.stopSearchTimer();
-                Log.v("moves", searchActions.size()+"");
                 goalFound = true;
                 GridTemplate.GameStateDone = true;
             }
-            Log.v("cost", spaceTile.cost+"");
             ArrayList<SpaceTile.Direction> directions = spaceTile.availableMoves();
             for(SpaceTile.Direction direction : directions){
                 SpaceTile tempSpaceTile = spaceTile.clone();
@@ -124,7 +118,6 @@ public class GameAI {
                 gameStates.add(tempSpaceTile.gameState);
             }
             if(spaceTileQueue.size() == 0) goalFound = true;
-            Log.v("fringe", spaceTileQueue.size()+"");
             spaceTile = spaceTileQueue.poll();
         }
         return searchActions;
@@ -147,11 +140,9 @@ public class GameAI {
                 searchActions.addAll(spaceTile.actions);
                 this.gameAIProperties.numberOfMovesFound(searchActions.size());
                 this.gameAIProperties.stopSearchTimer();
-                Log.v("moves", searchActions.size()+"");
                 goalFound = true;
                 GridTemplate.GameStateDone = true;
             }
-            Log.v("heuristic", spaceTile.computeHeuristic()+"");
             ArrayList<SpaceTile.Direction> directions = spaceTile.availableMoves();
             for(SpaceTile.Direction direction : directions){
                 SpaceTile tempSpaceTile = spaceTile.clone();
@@ -162,7 +153,6 @@ public class GameAI {
                 gameStates.add(tempSpaceTile.gameState);
             }
             if(spaceTileQueue.size() == 0) goalFound = true;
-            Log.v("fringe", spaceTileQueue.size()+"");
             spaceTile = spaceTileQueue.poll();
         }
         return searchActions;
@@ -185,26 +175,20 @@ public class GameAI {
                 searchActions.addAll(spaceTile.actions);
                 this.gameAIProperties.numberOfMovesFound(searchActions.size());
                 this.gameAIProperties.stopSearchTimer();
-                Log.v("moves", searchActions.size()+"");
                 goalFound = true;
                 GridTemplate.GameStateDone = true;
             }
-            Log.v("AStarCost", spaceTile.computeAStarCost()+"");
             ArrayList<SpaceTile.Direction> directions = spaceTile.availableMoves();
             for(SpaceTile.Direction direction : directions){
                 SpaceTile tempSpaceTile = spaceTile.clone();
                 tempSpaceTile.actions.addAll(spaceTile.actions);
                 tempSpaceTile.moveSpaceTile(direction, false);
-                if(gameStates.contains(tempSpaceTile.gameState)) {
-                    Log.v("check", "found");
-                    continue;
-                }
+                if(gameStates.contains(tempSpaceTile.gameState)) continue;
                 spaceTileQueue.add(tempSpaceTile);
                 gameStates.add(tempSpaceTile.gameState);
             }
             if(spaceTileQueue.size() == 0) goalFound = true;
             else{spaceTile = spaceTileQueue.poll();}
-            Log.v("fringe", spaceTileQueue.size()+"");
         }
         return searchActions;
     }
