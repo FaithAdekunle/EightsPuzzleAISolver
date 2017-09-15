@@ -37,6 +37,9 @@ public class SpaceTile {
                         moveIndex++;
                         handler.postDelayed(actionRunnable, ACTION_DELAY);
                     }
+                    else{
+                        directions = new ArrayList<>();
+                    }
                 }
             }
         };
