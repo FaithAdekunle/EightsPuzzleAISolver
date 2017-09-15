@@ -3,6 +3,7 @@ package com.project.faith.eightpuzzle;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.os.Handler;
 import java.util.Date;
 
 public class SearchFragment extends Fragment{
@@ -11,8 +12,18 @@ public class SearchFragment extends Fragment{
     Date startTimer;
     Date endTimer;
     int numberOfMoves = 0;
+    final static int ACTION_DELAY = 1000;
+    Runnable actionRunnable;
+    Handler handler = new Handler();
 
-    public SearchFragment() {}
+    public SearchFragment() {
+        actionRunnable = new Runnable() {
+            @Override
+            public void run() {
+                readyToSearch.searchBegin(gameAIProperties);
+            }
+        };
+    }
 
     public interface onSpaceTileReadyToSearch{
         void searchBegin(GameAI.GameAIProperties gameAIProperties);
@@ -24,7 +35,7 @@ public class SearchFragment extends Fragment{
         super.onAttach(activity);
         try{
             readyToSearch = (onSpaceTileReadyToSearch) activity;
-            readyToSearch.searchBegin(this.gameAIProperties);
+            handler.postDelayed(actionRunnable, ACTION_DELAY);
         }
         catch(ClassCastException e){
             throw new ClassCastException(activity.toString() + "MainActivity must implement onSpaceTileReadyToSearch interface");
@@ -45,13 +56,6 @@ public class SearchFragment extends Fragment{
             endTimer = new Date();
             double timeDiffSeconds = (endTimer.getTime() - startTimer.getTime())/1000;
             readyToSearch.searchEnd(timeDiffSeconds, numberOfMoves);
-        }
-
-        private double convertTime(double time){
-            if(time <= 60) return time;
-            else{
-                return time/60;
-            }
         }
 
         @Override
