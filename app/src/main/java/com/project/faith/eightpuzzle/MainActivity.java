@@ -180,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
     public void searchEnd(double duration, int numberOfMoves) {
         searchLength.setVisibility(View.VISIBLE);
         movesFound.setVisibility(View.VISIBLE);
-        if(duration > 60) duration = duration/60;
         searchLength.setText("Duration: " + (duration <= 60 ? duration + "s" : String.valueOf(duration/60).substring(0, 4) + "m") + "");
         movesFound.setText("Goal: " + numberOfMoves + "");
     }
