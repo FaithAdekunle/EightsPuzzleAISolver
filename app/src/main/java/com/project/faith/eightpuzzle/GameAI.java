@@ -1,6 +1,9 @@
 package com.project.faith.eightpuzzle;
 
 
+import android.os.AsyncTask;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -10,12 +13,14 @@ import java.util.Queue;
  * Created by Faith on 8/16/2017.
  */
 
-public class GameAI {
+public class GameAI extends AsyncTask<SpaceTile, Integer, ArrayList<SpaceTile.Direction>>{
 
-    public GameAIProperties gameAIProperties;
+    private GameAIProperties gameAIProperties;
+    private Grid grid;
 
-    public GameAI(GameAIProperties gameAIProperties){
+    public GameAI(GameAIProperties gameAIProperties, Grid grid){
         this.gameAIProperties = gameAIProperties;
+        this.grid= grid;
     }
 
     public interface GameAIProperties{
@@ -24,26 +29,21 @@ public class GameAI {
         void numberOfMovesFound(int num);
     }
 
-    public ArrayList<SpaceTile.Direction> DepthFirstSearch(Grid grid){
-        SpaceTile spaceTile = grid.spaceTile;
+    public ArrayList<SpaceTile.Direction> DepthFirstSearch(SpaceTile spaceTile){
+        ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         ArrayList<SpaceTile> spaceTiles = new ArrayList<>();
         ArrayList<GameState> gameStates = new ArrayList<>();
-        ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         boolean goalFound = false;
-        this.gameAIProperties.startSearchTimer();
-        while(!goalFound){
+        while(!goalFound && !this.isCancelled()){
             ArrayList<SpaceTile.Direction> directions = spaceTile.availableMoves();
             for(SpaceTile.Direction direction : directions){
                 SpaceTile tempSpaceTile = spaceTile.clone();
                 tempSpaceTile.actions.addAll(spaceTile.actions);
                 tempSpaceTile.moveSpaceTile(direction, false);
                 if(gameStates.contains(tempSpaceTile.gameState)) continue;
-                if(((tempSpaceTile.row == 0 && tempSpaceTile.col == 0) || (tempSpaceTile.row ==  grid.gridScale-1 && tempSpaceTile.col == grid.gridScale-1)) && tempSpaceTile.gameState.isGoalState(grid.gridScale)) {
+                if(tempSpaceTile.atGridEdge() && tempSpaceTile.gameState.isGoalState(tempSpaceTile.gridScale)) {
                     goalFound = true;
-                    GridTemplate.GameStateDone = true;
-                    searchActions.addAll(tempSpaceTile.actions);
-                    this.gameAIProperties.numberOfMovesFound(searchActions.size());
-                    this.gameAIProperties.stopSearchTimer();
+                    searchActions = tempSpaceTile.actions;
                 }
                 spaceTiles.add(0, tempSpaceTile);
                 gameStates.add(tempSpaceTile.gameState);
@@ -57,26 +57,21 @@ public class GameAI {
         return  searchActions;
     }
 
-    public ArrayList<SpaceTile.Direction> BreadthFirstSearch(Grid grid){
-        SpaceTile spaceTile = grid.spaceTile;
+    public ArrayList<SpaceTile.Direction> BreadthFirstSearch(SpaceTile spaceTile){
+        ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         ArrayList<SpaceTile> spaceTiles = new ArrayList<>();
         ArrayList<GameState> gameStates = new ArrayList<>();
-        ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         boolean goalFound = false;
-        this.gameAIProperties.startSearchTimer();
-        while(!goalFound){
+        while(!goalFound && !this.isCancelled()){
             ArrayList<SpaceTile.Direction> directions = spaceTile.availableMoves();
             for(SpaceTile.Direction direction : directions){
                 SpaceTile tempSpaceTile = spaceTile.clone();
                 tempSpaceTile.actions.addAll(spaceTile.actions);
                 tempSpaceTile.moveSpaceTile(direction, false);
                 if(gameStates.contains(tempSpaceTile.gameState)) continue;
-                if(((tempSpaceTile.row == 0 && tempSpaceTile.col == 0) || (tempSpaceTile.row ==  grid.gridScale-1 && tempSpaceTile.col == grid.gridScale-1)) && tempSpaceTile.gameState.isGoalState(grid.gridScale)) {
+                if(tempSpaceTile.atGridEdge() && tempSpaceTile.gameState.isGoalState(tempSpaceTile.gridScale)) {
                     goalFound = true;
-                    GridTemplate.GameStateDone = true;
-                    searchActions.addAll(tempSpaceTile.actions);
-                    this.gameAIProperties.numberOfMovesFound(searchActions.size());
-                    this.gameAIProperties.stopSearchTimer();
+                    searchActions = tempSpaceTile.actions;
                 }
                 spaceTiles.add(tempSpaceTile);
                 gameStates.add(tempSpaceTile.gameState);
@@ -88,8 +83,8 @@ public class GameAI {
         return  searchActions;
     }
 
-    public ArrayList<SpaceTile.Direction> UniformCostSearch(Grid grid){
-        SpaceTile spaceTile = grid.spaceTile;
+    public ArrayList<SpaceTile.Direction> UniformCostSearch(SpaceTile spaceTile){
+        ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         Queue<SpaceTile> spaceTileQueue = new PriorityQueue<>(10, new Comparator<SpaceTile>() {
             @Override
             public int compare(SpaceTile o1, SpaceTile o2) {
@@ -97,16 +92,11 @@ public class GameAI {
             }
         });
         ArrayList<GameState> gameStates = new ArrayList<>();
-        ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         boolean goalFound = false;
-        this.gameAIProperties.startSearchTimer();
-        while(!goalFound){
-            if(((spaceTile.row == 0 && spaceTile.col == 0) || (spaceTile.row ==  grid.gridScale-1 && spaceTile.col == grid.gridScale-1)) && spaceTile.gameState.isGoalState(grid.gridScale)) {
-                searchActions.addAll(spaceTile.actions);
-                this.gameAIProperties.numberOfMovesFound(searchActions.size());
-                this.gameAIProperties.stopSearchTimer();
+        while(!goalFound && !this.isCancelled()){
+            if(spaceTile.atGridEdge() && spaceTile.gameState.isGoalState(spaceTile.gridScale)) {
+                searchActions = spaceTile.actions;
                 goalFound = true;
-                GridTemplate.GameStateDone = true;
             }
             ArrayList<SpaceTile.Direction> directions = spaceTile.availableMoves();
             for(SpaceTile.Direction direction : directions){
@@ -123,8 +113,8 @@ public class GameAI {
         return searchActions;
     }
 
-    public ArrayList<SpaceTile.Direction> GreedySearch(Grid grid){
-        SpaceTile spaceTile = grid.spaceTile;
+    public ArrayList<SpaceTile.Direction> GreedySearch(SpaceTile spaceTile){
+        ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         Queue<SpaceTile> spaceTileQueue = new PriorityQueue<>(10, new Comparator<SpaceTile>() {
             @Override
             public int compare(SpaceTile o1, SpaceTile o2) {
@@ -132,16 +122,11 @@ public class GameAI {
             }
         });
         ArrayList<GameState> gameStates = new ArrayList<>();
-        ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         boolean goalFound = false;
-        this.gameAIProperties.startSearchTimer();
-        while(!goalFound){
-            if(((spaceTile.row == 0 && spaceTile.col == 0) || (spaceTile.row ==  grid.gridScale-1 && spaceTile.col == grid.gridScale-1)) && spaceTile.gameState.isGoalState(grid.gridScale)) {
-                searchActions.addAll(spaceTile.actions);
-                this.gameAIProperties.numberOfMovesFound(searchActions.size());
-                this.gameAIProperties.stopSearchTimer();
+        while(!goalFound && !this.isCancelled()){
+            if(spaceTile.atGridEdge() && spaceTile.gameState.isGoalState(spaceTile.gridScale)) {
+                searchActions = spaceTile.actions;
                 goalFound = true;
-                GridTemplate.GameStateDone = true;
             }
             ArrayList<SpaceTile.Direction> directions = spaceTile.availableMoves();
             for(SpaceTile.Direction direction : directions){
@@ -158,8 +143,8 @@ public class GameAI {
         return searchActions;
     }
 
-    public ArrayList<SpaceTile.Direction> AStarSearch(Grid grid){
-        SpaceTile spaceTile = grid.spaceTile;
+    public ArrayList<SpaceTile.Direction> AStarSearch(SpaceTile spaceTile){
+        ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         Queue<SpaceTile> spaceTileQueue = new PriorityQueue<>(10, new Comparator<SpaceTile>() {
             @Override
             public int compare(SpaceTile o1, SpaceTile o2) {
@@ -167,16 +152,11 @@ public class GameAI {
             }
         });
         ArrayList<GameState> gameStates = new ArrayList<>();
-        ArrayList<SpaceTile.Direction> searchActions = new ArrayList<>();
         boolean goalFound = false;
-        this.gameAIProperties.startSearchTimer();
-        while(!goalFound){
-            if(((spaceTile.row == 0 && spaceTile.col == 0) || (spaceTile.row ==  grid.gridScale-1 && spaceTile.col == grid.gridScale-1)) && spaceTile.gameState.isGoalState(grid.gridScale)) {
-                searchActions.addAll(spaceTile.actions);
-                this.gameAIProperties.numberOfMovesFound(searchActions.size());
-                this.gameAIProperties.stopSearchTimer();
+        while(!goalFound && !this.isCancelled()){
+            if(spaceTile.atGridEdge() && spaceTile.gameState.isGoalState(spaceTile.gridScale)) {
+                searchActions = spaceTile.actions;
                 goalFound = true;
-                GridTemplate.GameStateDone = true;
             }
             ArrayList<SpaceTile.Direction> directions = spaceTile.availableMoves();
             for(SpaceTile.Direction direction : directions){
@@ -191,5 +171,32 @@ public class GameAI {
             else{spaceTile = spaceTileQueue.poll();}
         }
         return searchActions;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        this.gameAIProperties.startSearchTimer();
+    }
+
+    @Override
+    protected ArrayList<SpaceTile.Direction> doInBackground(SpaceTile... params) {
+        switch (GridTemplate.selectedMode){
+            case DEPTHFIRSTSEARCH: return this.DepthFirstSearch(params[0]);
+            case BREADTHFIRSTSEARCH: return this.BreadthFirstSearch(params[0]);
+            case UNIFORMCOSTSEARCH: return this.UniformCostSearch(params[0]);
+            case GREEDYSEARCH: return this.GreedySearch(params[0]);
+            case ASTARSEARCH: return this.AStarSearch(params[0]);
+            default: return new ArrayList<>();
+        }
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList<SpaceTile.Direction> directions) {
+        super.onPostExecute(directions);
+        GridTemplate.GameStateDone = true;
+        this.gameAIProperties.numberOfMovesFound(directions.size());
+        this.gameAIProperties.stopSearchTimer();
+        this.grid.spaceTile.takeActions(directions);
     }
 }

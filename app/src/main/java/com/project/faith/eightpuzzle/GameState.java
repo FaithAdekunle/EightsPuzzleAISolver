@@ -60,7 +60,7 @@ public class GameState {
         GameState gameState = (GameState) obj;
         if(gameState.tileStates.size() != this.tileStates.size()) return false;
         for(int i=0; i<gameState.tileStates.size(); i++){
-            if(gameState.tileStates.get(i).row != this.tileStates.get(i).row || gameState.tileStates.get(i).col != this.tileStates.get(i).col) return false;
+            if(!gameState.tileStates.get(i).isSameAS(this.tileStates.get(i))) return false;
         }
         return true;
     }

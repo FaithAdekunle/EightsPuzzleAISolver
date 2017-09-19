@@ -89,6 +89,10 @@ public class Tile {
         this.setPosition(spaceRow, spaceCol, false);
     }
 
+    public boolean isSameAS(Tile tile){
+        return this.row == tile.row && this.col == tile.col && this.value == tile.value;
+    }
+
     public Tile clone(){
         Tile newTile = new Tile(this.value, this.row, this.col);
         return newTile;

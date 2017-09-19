@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
     public int moves = 0;
     public Grid grid;
     public boolean isSet = false;
+    public static GameAI gameAI = null;
 
 
     @Override
@@ -113,6 +114,10 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
     }
 
     public void onGameReset(boolean reset){
+        if(gameAI != null) {
+            gameAI.cancel(true);
+            gameAI = null;
+        }
         if(reset){
             int[][] matrix = grid.matrix;
             grid = new Grid(3);
@@ -170,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
 
     @Override
     public void searchBegin(GameAI.GameAIProperties gameAIProperties) {
-        if(!GridTemplate.GameStateDone)this.grid.spaceTile.takeActions(gameAIProperties);
+        if(!GridTemplate.GameStateDone)this.grid.spaceTile.getActions(gameAIProperties);
     }
 
     @Override

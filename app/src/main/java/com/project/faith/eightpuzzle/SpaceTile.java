@@ -17,10 +17,9 @@ public class SpaceTile {
     public int col;
     public int cost = 0;
     private View spaceTileView;
-    public  GameState gameState;
+    public GameState gameState;
     public enum Direction {UP, DOWN, RIGHT, LEFT}
     public ArrayList<Direction> actions = new ArrayList<>();
-    Handler handler = new Handler();
     Runnable actionRunnable;
     final static int ACTION_DELAY = 500;
     ArrayList<Direction> directions = new ArrayList<>();
@@ -35,6 +34,7 @@ public class SpaceTile {
                     if(moveIndex < directions.size()){
                         moveSpaceTile(directions.get(moveIndex), true);
                         moveIndex++;
+                        Handler handler = new Handler();
                         handler.postDelayed(actionRunnable, ACTION_DELAY);
                     }
                     else{
@@ -142,6 +142,10 @@ public class SpaceTile {
         return this.cost + this.computeHeuristic();
     }
 
+    public boolean atGridEdge(){
+        return (this.row == 0 && this.col == 0) || (this.row ==  this.gridScale-1 && this.col == this.gridScale-1);
+    }
+
     public ArrayList<Direction> availableMoves(){
         ArrayList<Direction> moves = new ArrayList<>();
         if(row-1 >= 0) moves.add(Direction.UP);
@@ -151,14 +155,16 @@ public class SpaceTile {
         return moves;
     }
 
-    public void takeActions(GameAI.GameAIProperties gameAIProperties){
-        GameAI gameAI = new GameAI(gameAIProperties);
-        if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.BREADTHFIRSTSEARCH)){directions = gameAI.BreadthFirstSearch(this.grid);}
-        else if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.DEPTHFIRSTSEARCH)){directions = gameAI.DepthFirstSearch(this.grid);}
-        else if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.UNIFORMCOSTSEARCH)){directions = gameAI.UniformCostSearch(this.grid);}
-        else if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.GREEDYSEARCH)){directions = gameAI.GreedySearch(this.grid);}
-        else if(GridTemplate.selectedMode.equals(GridTemplate.GameMode.ASTARSEARCH)){directions = gameAI.AStarSearch(this.grid);}
+    public void getActions(GameAI.GameAIProperties gameAIProperties){
+        GameAI gameAI = new GameAI(gameAIProperties, this.grid);
+        MainActivity.gameAI = gameAI;
+        gameAI.execute(this.clone());
+    }
+
+    public void takeActions(ArrayList<Direction> directions){
+        this.directions = directions;
         moveIndex = 0;
+        Handler handler = new Handler();
         handler.postDelayed(actionRunnable, ACTION_DELAY);
     }
 

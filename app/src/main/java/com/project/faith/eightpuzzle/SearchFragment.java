@@ -12,18 +12,8 @@ public class SearchFragment extends Fragment{
     Date startTimer;
     Date endTimer;
     int numberOfMoves = 0;
-    final static int ACTION_DELAY = 1000;
-    Runnable actionRunnable;
-    Handler handler = new Handler();
 
-    public SearchFragment() {
-        actionRunnable = new Runnable() {
-            @Override
-            public void run() {
-                readyToSearch.searchBegin(gameAIProperties);
-            }
-        };
-    }
+    public SearchFragment() {}
 
     public interface onSpaceTileReadyToSearch{
         void searchBegin(GameAI.GameAIProperties gameAIProperties);
@@ -35,7 +25,7 @@ public class SearchFragment extends Fragment{
         super.onAttach(activity);
         try{
             readyToSearch = (onSpaceTileReadyToSearch) activity;
-            handler.postDelayed(actionRunnable, ACTION_DELAY);
+            readyToSearch.searchBegin(gameAIProperties);
         }
         catch(ClassCastException e){
             throw new ClassCastException(activity.toString() + "MainActivity must implement onSpaceTileReadyToSearch interface");
