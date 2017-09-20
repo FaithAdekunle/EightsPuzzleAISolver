@@ -3,9 +3,7 @@ package com.project.faith.eightpuzzle;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.os.Handler;
 import android.util.Log;
-
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
