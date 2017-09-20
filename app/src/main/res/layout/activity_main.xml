@@ -57,7 +57,7 @@
             android:layout_marginRight="@dimen/parentPadding"
             android:layout_gravity="center_vertical"
             android:id="@+id/progressBar"
-            android:progressTint="@android:color/white"/>
+            android:progressTint="@color/colorPrimary"/>
 
     </LinearLayout>
 
