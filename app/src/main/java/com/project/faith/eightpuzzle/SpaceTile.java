@@ -30,7 +30,7 @@ public class SpaceTile {
         actionRunnable = new Runnable() {
             @Override
             public void run() {
-                if(GridTemplate.GameStateDone){
+                if(GridTemplate.GameStateSearchOngoing){
                     if(moveIndex < directions.size()){
                         moveSpaceTile(directions.get(moveIndex), true);
                         moveIndex++;

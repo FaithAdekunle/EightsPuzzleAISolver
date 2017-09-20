@@ -11,7 +11,7 @@ public class GridTemplate {
 
     public static GameMode selectedMode = GameMode.MANUAL;
 
-    public static boolean GameStateDone = false;
+    public static boolean GameStateSearchOngoing = false;
 
     public static GridTemplates selectedTemplate = GridTemplates.TEMPLATE1;
 

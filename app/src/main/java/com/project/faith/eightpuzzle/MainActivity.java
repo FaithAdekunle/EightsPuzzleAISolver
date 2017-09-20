@@ -80,24 +80,19 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
                 onGameStart(false);
                 return true;
             case R.id.astarsearch:
-                GridTemplate.selectedMode = GridTemplate.GameMode.ASTARSEARCH;
-                setFragment();
+                setFragment(GridTemplate.GameMode.ASTARSEARCH);
                 return true;
             case R.id.greedysearch:
-                GridTemplate.selectedMode = GridTemplate.GameMode.GREEDYSEARCH;
-                setFragment();
+                setFragment(GridTemplate.GameMode.GREEDYSEARCH);
                 return true;
             case R.id.uniformcostsearch:
-                GridTemplate.selectedMode = GridTemplate.GameMode.UNIFORMCOSTSEARCH;
-                setFragment();
+                setFragment(GridTemplate.GameMode.UNIFORMCOSTSEARCH);
                 return true;
             case R.id.breadthfirstsearch:
-                GridTemplate.selectedMode = GridTemplate.GameMode.BREADTHFIRSTSEARCH;
-                setFragment();
+                setFragment(GridTemplate.GameMode.BREADTHFIRSTSEARCH);
                 return true;
             case R.id.depthfirstsearch:
-                GridTemplate.selectedMode = GridTemplate.GameMode.DEPTHFIRSTSEARCH;
-                setFragment();
+                setFragment(GridTemplate.GameMode.DEPTHFIRSTSEARCH);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -125,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
             grid.setTiles(gridContainer);
         }
         grid.spaceTile.setGameState();
-        GridTemplate.GameStateDone = false;
+        GridTemplate.GameStateSearchOngoing = false;
         GridTemplate.selectedMode = GridTemplate.GameMode.MANUAL;
         moves = 0;
         movesText.setText("Moves: " + moves);
@@ -154,8 +149,9 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
         }
     }
 
-    public void setFragment(){
-        if(!GridTemplate.GameStateDone){
+    public void setFragment(GridTemplate.GameMode gameMode){
+        if(!GridTemplate.GameStateSearchOngoing){
+            GridTemplate.selectedMode = gameMode;
             movesText.setText("Searching...\nThis may take a while.");
             FragmentManager manager = getFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
@@ -175,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
 
     @Override
     public void searchBegin(GameAI.GameAIProperties gameAIProperties) {
-        if(!GridTemplate.GameStateDone)this.grid.spaceTile.getActions(gameAIProperties);
+        this.grid.spaceTile.getActions(gameAIProperties);
     }
 
     @Override

@@ -2,8 +2,6 @@ package com.project.faith.eightpuzzle;
 
 
 import android.os.AsyncTask;
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -176,6 +174,7 @@ public class GameAI extends AsyncTask<SpaceTile, Integer, ArrayList<SpaceTile.Di
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        GridTemplate.GameStateSearchOngoing = true;
         this.gameAIProperties.startSearchTimer();
     }
 
@@ -194,7 +193,6 @@ public class GameAI extends AsyncTask<SpaceTile, Integer, ArrayList<SpaceTile.Di
     @Override
     protected void onPostExecute(ArrayList<SpaceTile.Direction> directions) {
         super.onPostExecute(directions);
-        GridTemplate.GameStateDone = true;
         this.gameAIProperties.numberOfMovesFound(directions.size());
         this.gameAIProperties.stopSearchTimer();
         this.grid.spaceTile.takeActions(directions);
