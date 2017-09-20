@@ -10,8 +10,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends AppCompatActivity implements SearchFragment.onSpaceTileReadyToSearch{
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
     public TextView movesText;
     public TextView movesFound;
     public TextView searchLength;
+    public ProgressBar progressBar;
     public int moves = 0;
     public Grid grid;
     public boolean isSet = false;
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
         movesText = (TextView) findViewById(R.id.scoreContainer);
         movesFound = (TextView) findViewById(R.id.movesFound);
         searchLength = (TextView) findViewById(R.id.searchLength);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         gridContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -123,9 +128,12 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
         GridTemplate.GameStateSearchOngoing = false;
         GridTemplate.selectedMode = GridTemplate.GameMode.MANUAL;
         moves = 0;
+        progressBar.setProgress(0);
         movesText.setText("Moves: " + moves);
         movesFound.setVisibility(View.INVISIBLE);
         searchLength.setVisibility(View.INVISIBLE);
+        movesText.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
         int[][] matrix = grid.matrix;
         int gridScale = grid.gridScale;
         ChangeSpaceTile changeSpaceTile = new ChangeSpaceTile() {
@@ -152,7 +160,10 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
     public void setFragment(GridTemplate.GameMode gameMode){
         if(!GridTemplate.GameStateSearchOngoing){
             GridTemplate.selectedMode = gameMode;
-            movesText.setText("Searching...\nThis may take a while.");
+            movesText.setVisibility(View.GONE);
+            movesFound.setVisibility(View.GONE);
+            searchLength.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
             FragmentManager manager = getFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
             SearchFragment fragment = new SearchFragment();
@@ -170,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
     }
 
     @Override
-    public void searchBegin(GameAI.GameAIProperties gameAIProperties) {
+    public void searchBegin(GameAI.GameAIProperties gameAIProperties) throws ExecutionException{
         this.grid.spaceTile.getActions(gameAIProperties);
     }
 
@@ -178,6 +189,8 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
     public void searchEnd(double duration, int numberOfMoves) {
         searchLength.setVisibility(View.VISIBLE);
         movesFound.setVisibility(View.VISIBLE);
+        movesText.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
         searchLength.setText("Duration: " + (duration <= 60 ? duration + "s" : String.valueOf(duration/60).substring(0, 4) + "m") + "");
         movesFound.setText("Goal: " + numberOfMoves + "");
     }
@@ -188,6 +201,11 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
         this.onPause();
     }
 
+    @Override
+    public void searchOnGoing(int progress) {
+        progressBar.setProgress(progress);
+    }
+
     private void updateMoves(){
         moves++;
         this.movesText.setText("Moves: "+ moves);
@@ -196,6 +214,4 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.on
     public interface ChangeSpaceTile{
         void updateSpaceTile(int row, int col);
     }
-
-
 }

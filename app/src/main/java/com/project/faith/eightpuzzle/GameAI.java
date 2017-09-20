@@ -25,6 +25,7 @@ public class GameAI extends AsyncTask<SpaceTile, Integer, ArrayList<SpaceTile.Di
         void startSearchTimer();
         void stopSearchTimer();
         void numberOfMovesFound(int num);
+        void updateSearchProgress(int progress);
     }
 
     public ArrayList<SpaceTile.Direction> DepthFirstSearch(SpaceTile spaceTile){
@@ -32,13 +33,21 @@ public class GameAI extends AsyncTask<SpaceTile, Integer, ArrayList<SpaceTile.Di
         ArrayList<SpaceTile> spaceTiles = new ArrayList<>();
         ArrayList<GameState> gameStates = new ArrayList<>();
         boolean goalFound = false;
+        int heuristic = 0;
+        int total = spaceTile.gridScale * spaceTile.gridScale;
         while(!goalFound && !this.isCancelled()){
+            int currentHeuristic = spaceTile.computeHeuristic();
             ArrayList<SpaceTile.Direction> directions = spaceTile.availableMoves();
             for(SpaceTile.Direction direction : directions){
                 SpaceTile tempSpaceTile = spaceTile.clone();
                 tempSpaceTile.actions.addAll(spaceTile.actions);
                 tempSpaceTile.moveSpaceTile(direction, false);
                 if(gameStates.contains(tempSpaceTile.gameState)) continue;
+                if(heuristic < currentHeuristic){
+                    int progress = (currentHeuristic) * 100 / total;
+                    onProgressUpdate(progress);
+                    heuristic = currentHeuristic;
+                }
                 if(tempSpaceTile.atGridEdge() && tempSpaceTile.gameState.isGoalState(tempSpaceTile.gridScale)) {
                     goalFound = true;
                     searchActions = tempSpaceTile.actions;
@@ -60,13 +69,21 @@ public class GameAI extends AsyncTask<SpaceTile, Integer, ArrayList<SpaceTile.Di
         ArrayList<SpaceTile> spaceTiles = new ArrayList<>();
         ArrayList<GameState> gameStates = new ArrayList<>();
         boolean goalFound = false;
+        int heuristic = 0;
+        int total = spaceTile.gridScale * spaceTile.gridScale;
         while(!goalFound && !this.isCancelled()){
+            int currentHeuristic = spaceTile.computeHeuristic();
             ArrayList<SpaceTile.Direction> directions = spaceTile.availableMoves();
             for(SpaceTile.Direction direction : directions){
                 SpaceTile tempSpaceTile = spaceTile.clone();
                 tempSpaceTile.actions.addAll(spaceTile.actions);
                 tempSpaceTile.moveSpaceTile(direction, false);
                 if(gameStates.contains(tempSpaceTile.gameState)) continue;
+                if(heuristic < currentHeuristic){
+                    int progress = (currentHeuristic) * 100 / total;
+                    onProgressUpdate(progress);
+                    heuristic = currentHeuristic;
+                }
                 if(tempSpaceTile.atGridEdge() && tempSpaceTile.gameState.isGoalState(tempSpaceTile.gridScale)) {
                     goalFound = true;
                     searchActions = tempSpaceTile.actions;
@@ -91,8 +108,12 @@ public class GameAI extends AsyncTask<SpaceTile, Integer, ArrayList<SpaceTile.Di
         });
         ArrayList<GameState> gameStates = new ArrayList<>();
         boolean goalFound = false;
+        int heuristic = 0;
+        int total = spaceTile.gridScale * spaceTile.gridScale;
         while(!goalFound && !this.isCancelled()){
+            int currentHeuristic = spaceTile.computeHeuristic();
             if(spaceTile.atGridEdge() && spaceTile.gameState.isGoalState(spaceTile.gridScale)) {
+                onProgressUpdate(100);
                 searchActions = spaceTile.actions;
                 goalFound = true;
             }
@@ -102,6 +123,11 @@ public class GameAI extends AsyncTask<SpaceTile, Integer, ArrayList<SpaceTile.Di
                 tempSpaceTile.actions.addAll(spaceTile.actions);
                 tempSpaceTile.moveSpaceTile(direction, false);
                 if(gameStates.contains(tempSpaceTile.gameState)) continue;
+                if(heuristic < currentHeuristic){
+                    int progress = (currentHeuristic) * 100 / total;
+                    onProgressUpdate(progress);
+                    heuristic = currentHeuristic;
+                }
                 spaceTileQueue.add(tempSpaceTile);
                 gameStates.add(tempSpaceTile.gameState);
             }
@@ -121,8 +147,12 @@ public class GameAI extends AsyncTask<SpaceTile, Integer, ArrayList<SpaceTile.Di
         });
         ArrayList<GameState> gameStates = new ArrayList<>();
         boolean goalFound = false;
+        int heuristic = 0;
+        int total = spaceTile.gridScale * spaceTile.gridScale;
         while(!goalFound && !this.isCancelled()){
+            int currentHeuristic = spaceTile.computeHeuristic();
             if(spaceTile.atGridEdge() && spaceTile.gameState.isGoalState(spaceTile.gridScale)) {
+                onProgressUpdate(100);
                 searchActions = spaceTile.actions;
                 goalFound = true;
             }
@@ -132,6 +162,11 @@ public class GameAI extends AsyncTask<SpaceTile, Integer, ArrayList<SpaceTile.Di
                 tempSpaceTile.actions.addAll(spaceTile.actions);
                 tempSpaceTile.moveSpaceTile(direction, false);
                 if(gameStates.contains(tempSpaceTile.gameState)) continue;
+                if(heuristic < currentHeuristic){
+                    int progress = (currentHeuristic) * 100 / total;
+                    onProgressUpdate(progress);
+                    heuristic = currentHeuristic;
+                }
                 spaceTileQueue.add(tempSpaceTile);
                 gameStates.add(tempSpaceTile.gameState);
             }
@@ -151,8 +186,12 @@ public class GameAI extends AsyncTask<SpaceTile, Integer, ArrayList<SpaceTile.Di
         });
         ArrayList<GameState> gameStates = new ArrayList<>();
         boolean goalFound = false;
+        int heuristic = 0;
+        int total = spaceTile.gridScale * spaceTile.gridScale;
         while(!goalFound && !this.isCancelled()){
+            int currentHeuristic = spaceTile.computeHeuristic();
             if(spaceTile.atGridEdge() && spaceTile.gameState.isGoalState(spaceTile.gridScale)) {
+                onProgressUpdate(100);
                 searchActions = spaceTile.actions;
                 goalFound = true;
             }
@@ -162,6 +201,11 @@ public class GameAI extends AsyncTask<SpaceTile, Integer, ArrayList<SpaceTile.Di
                 tempSpaceTile.actions.addAll(spaceTile.actions);
                 tempSpaceTile.moveSpaceTile(direction, false);
                 if(gameStates.contains(tempSpaceTile.gameState)) continue;
+                if(heuristic < currentHeuristic){
+                    int progress = (currentHeuristic) * 100 / total;
+                    onProgressUpdate(progress);
+                    heuristic = currentHeuristic;
+                }
                 spaceTileQueue.add(tempSpaceTile);
                 gameStates.add(tempSpaceTile.gameState);
             }
@@ -196,5 +240,11 @@ public class GameAI extends AsyncTask<SpaceTile, Integer, ArrayList<SpaceTile.Di
         this.gameAIProperties.numberOfMovesFound(directions.size());
         this.gameAIProperties.stopSearchTimer();
         this.grid.spaceTile.takeActions(directions);
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
+        gameAIProperties.updateSearchProgress(values[0]);
     }
 }

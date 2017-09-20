@@ -31,8 +31,7 @@
             android:layout_weight="1"
             android:gravity="center_horizontal|center_vertical"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:id="@+id/searchLength"
-            tools:text="abcd"/>
+            android:id="@+id/searchLength"/>
 
         <TextView
         android:layout_width="0dp"
@@ -40,8 +39,7 @@
         android:layout_weight="1"
         android:gravity="center_horizontal|center_vertical"
         android:layout_gravity="center_horizontal|center_vertical"
-        android:id="@+id/scoreContainer"
-        tools:text="abcd"/>
+        android:id="@+id/scoreContainer"/>
 
         <TextView
             android:layout_width="0dp"
@@ -49,8 +47,18 @@
             android:layout_weight="1"
             android:gravity="center_horizontal|center_vertical"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:id="@+id/movesFound"
-            tools:text="abcd"/>
+            android:id="@+id/movesFound"/>
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_marginLeft="@dimen/parentPadding"
+            android:layout_marginRight="@dimen/parentPadding"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/progressBar"
+            android:progressTint="@android:color/white"/>
 
     </LinearLayout>
+
 </LinearLayout>

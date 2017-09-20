@@ -4,7 +4,10 @@ package com.project.faith.eightpuzzle;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Handler;
+import android.util.Log;
+
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 public class SearchFragment extends Fragment{
 
@@ -16,7 +19,8 @@ public class SearchFragment extends Fragment{
     public SearchFragment() {}
 
     public interface onSpaceTileReadyToSearch{
-        void searchBegin(GameAI.GameAIProperties gameAIProperties);
+        void searchBegin(GameAI.GameAIProperties gameAIProperties) throws ExecutionException;
+        void searchOnGoing(int progress);
         void searchEnd(double duration, int numberOfMoves);
         void searchMemoryError();
     }
@@ -30,7 +34,7 @@ public class SearchFragment extends Fragment{
         catch(ClassCastException e){
             throw new ClassCastException(activity.toString() + "MainActivity must implement onSpaceTileReadyToSearch interface");
         }
-        catch(OutOfMemoryError e){
+        catch(ExecutionException e){
             readyToSearch.searchMemoryError();
         }
     }
@@ -51,6 +55,12 @@ public class SearchFragment extends Fragment{
         @Override
         public void numberOfMovesFound(int num) {
             numberOfMoves = num;
+        }
+
+        @Override
+        public void updateSearchProgress(int progress) {
+            Log.v("progress", progress+"");
+            readyToSearch.searchOnGoing(progress);
         }
     };
 }

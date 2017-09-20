@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Faith on 8/16/2017.
@@ -155,7 +156,7 @@ public class SpaceTile {
         return moves;
     }
 
-    public void getActions(GameAI.GameAIProperties gameAIProperties){
+    public void getActions(GameAI.GameAIProperties gameAIProperties) throws ExecutionException{
         GameAI gameAI = new GameAI(gameAIProperties, this.grid);
         MainActivity.gameAI = gameAI;
         gameAI.execute(this.clone());
