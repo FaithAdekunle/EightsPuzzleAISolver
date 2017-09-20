@@ -13,7 +13,6 @@ import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import java.util.concurrent.ExecutionException;
 
 

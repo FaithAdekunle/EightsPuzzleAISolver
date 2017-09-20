@@ -3,7 +3,6 @@ package com.project.faith.eightpuzzle;
 
 import android.os.AsyncTask;
 import android.os.Handler;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
