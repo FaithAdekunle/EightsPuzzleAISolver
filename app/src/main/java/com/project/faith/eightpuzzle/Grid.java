@@ -1,7 +1,6 @@
 package com.project.faith.eightpuzzle;
 
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,6 @@ public class Grid {
             for(int j=0; j<gridScale; j++){
                 int ij = Integer.valueOf(tile[j]+"");
                 matrix[i][j] = ij;
-                Log.v("pos", ij+"");
             }
         }
     }

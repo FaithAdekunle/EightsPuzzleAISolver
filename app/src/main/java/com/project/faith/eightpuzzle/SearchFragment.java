@@ -3,7 +3,6 @@ package com.project.faith.eightpuzzle;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.util.Log;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
@@ -57,7 +56,6 @@ public class SearchFragment extends Fragment{
 
         @Override
         public void updateSearchProgress(int progress) {
-            Log.v("progress", progress+"");
             readyToSearch.searchOnGoing(progress);
         }
     };
